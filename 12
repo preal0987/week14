@@ -1,0 +1,40 @@
+clear; clc;
+
+x = linspace(-5, 5, 600);
+y = linspace(-5, 5, 600);
+
+[X, Y] = meshgrid(x, y);
+
+Z = exp(-0.06*(X.^2 + Y.^2)) ...
+    .* sin(4*X) .* cos(3*Y) ...
+    + 0.2*sin(X.*Y);
+
+surf(X, Y, Z);
+
+shading interp;
+colormap(jet);
+colorbar;
+
+xlabel('X');
+ylabel('Y');
+zlabel('Z');
+
+title('Detailed Surface Plot with Oscillation and Damping');
+
+view(45,30);
+camlight headlight;
+lighting phong;
+
+maxZ = max(Z(:));
+minZ = min(Z(:));
+
+[rowMax,colMax] = find(Z == maxZ);
+[rowMin,colMin] = find(Z == minZ);
+
+maxPoint = [X(rowMax,colMax), ...
+            Y(rowMax,colMax), ...
+            maxZ];
+
+minPoint = [X(rowMin,colMin), ...
+            Y(rowMin,colMin), ...
+            minZ];
