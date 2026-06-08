@@ -1,0 +1,35 @@
+clear; clc;
+
+batteryLife = normrnd(9.5, 1.2, 1, 50000);
+
+lowBattery = batteryLife < 8;
+
+normalBattery = batteryLife >= 8 & batteryLife < 11;
+
+excellentBattery = batteryLife >= 11;
+
+gradeCounts = [sum(lowBattery) ...
+               sum(normalBattery) ...
+               sum(excellentBattery)];
+
+gradeRatio = gradeCounts / 50000;
+
+figure;
+histogram(batteryLife, 50);
+xline(8);
+xline(11);
+
+xlabel('Battery Life (hours)');
+ylabel('Frequency');
+title('Battery Life Distribution');
+grid on;
+
+figure;
+bar(gradeCounts);
+
+xticklabels({'Low','Normal','Excellent'});
+
+xlabel('Grade');
+ylabel('Count');
+title('Battery Grade Counts');
+grid on;
