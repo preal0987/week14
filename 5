@@ -1,0 +1,33 @@
+clear; clc;
+
+n = 20000;
+
+hasClaim = rand(n,1) < 0.06;
+
+claimAmount = normrnd(800, 250, n, 1);
+
+claimAmount(claimAmount < 0) = 0;
+
+claimPayment = hasClaim .* claimAmount;
+
+totalPayment = sum(claimPayment);
+meanPayment = mean(claimPayment);
+meanClaimOnly = mean(claimPayment(hasClaim));
+
+
+numLargeClaim = sum(claimPayment >= 1200);
+
+
+figure;
+histogram(claimPayment);
+xlabel('Claim Payment');
+ylabel('Frequency');
+title('Histogram of All Claim Payments');
+grid on;
+
+figure;
+histogram(claimPayment(claimPayment > 0));
+xlabel('Claim Payment');
+ylabel('Frequency');
+title('Histogram of Positive Claim Payments');
+grid on;
