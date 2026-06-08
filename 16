@@ -1,0 +1,55 @@
+clear; clc;
+
+rng(3);
+
+t = linspace(0,60,6000);
+
+signal = sin(0.5*t) ...
+       + 0.4*sin(3*t) ...
+       + 0.15*randn(size(t));
+
+trend = movmean(signal,200);
+
+x = linspace(-5,5,300);
+y = linspace(-5,5,300);
+
+[X,Y] = meshgrid(x,y);
+
+Z = exp(-0.05*(X.^2 + Y.^2)) ...
+    .* cos(3*X) ...
+    .* sin(2*Y);
+
+tiledlayout(2,2);
+
+nexttile;
+plot(t,signal);
+hold on;
+plot(t,trend,'LineWidth',2);
+legend('Signal','Trend');
+xlabel('Time');
+ylabel('Amplitude');
+title('Time Series');
+grid on;
+hold off;
+
+nexttile;
+surf(X,Y,Z);
+shading interp;
+colorbar;
+xlabel('X');
+ylabel('Y');
+zlabel('Z');
+title('Surface Plot');
+view(45,30);
+
+nexttile;
+contourf(X,Y,Z,50,'LineColor','none');
+colorbar;
+xlabel('X');
+ylabel('Y');
+title('Filled Contour');
+grid on;
+
+sgtitle('Integrated Visualization Dashboard');
+
+print('visualization_dashboard','-dpng','-r300');
