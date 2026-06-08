@@ -1,0 +1,34 @@
+clear; clc;
+
+n = 3000;
+
+interArrival = exprnd(1.2, 1, n);
+
+arrival = cumsum(interArrival);
+
+service = exprnd(0.9, 1, n);
+
+startTime = zeros(1, n);
+finishTime = zeros(1, n);
+
+startTime(1) = arrival(1);
+finishTime(1) = startTime(1) + service(1);
+
+for i = 2:n
+    startTime(i) = max(arrival(i), finishTime(i-1));
+    finishTime(i) = startTime(i) + service(i);
+end
+
+waitingTime = startTime - arrival;
+
+meanWait = mean(waitingTime);
+maxWait = max(waitingTime);
+longWaitRatio = sum(waitingTime >= 5) / n;
+
+figure;
+histogram(waitingTime, 40);
+
+title('Waiting Time Distribution in a Data Center Queue');
+xlabel('Waiting Time');
+ylabel('Frequency');
+grid on;
