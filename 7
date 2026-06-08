@@ -1,0 +1,42 @@
+clear; clc;
+
+rng(7);
+
+t = linspace(0, 30, 300);
+
+trueSignal = 2*sin(0.4*t) + 0.7*cos(1.5*t);
+
+obsSignal = trueSignal + 0.25*randn(size(t));
+
+idx = randperm(length(t), 45);
+obsSignal(idx) = NaN;
+
+valid = ~isnan(obsSignal);
+
+recLinear = interp1(t(valid), obsSignal(valid), t, 'linear');
+
+recSpline = interp1(t(valid), obsSignal(valid), t, 'spline');
+
+rmseLinear = sqrt(mean((trueSignal - recLinear).^2));
+rmseSpline = sqrt(mean((trueSignal - recSpline).^2));
+
+figure;
+plot(t, trueSignal, 'k', 'LineWidth', 1.5);
+hold on;
+
+plot(t, obsSignal, 'bo');
+
+plot(t, recLinear, 'r');
+
+plot(t, recSpline, 'g');
+
+legend('True Signal', ...
+       'Observed Signal', ...
+       'Linear', ...
+       'Spline');
+
+xlabel('Time');
+ylabel('Signal');
+title('Signal Reconstruction');
+grid on;
+hold off;
